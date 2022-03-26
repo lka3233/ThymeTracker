@@ -5,13 +5,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tbl_tasks")
-public class Task extends AbstractEntity
+public class TaskEntity extends AbstractEntity
 {
     @Column
     String title;
-
-    @Column
-    boolean completed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
@@ -26,7 +23,7 @@ public class Task extends AbstractEntity
     @Column
     Long duration;
 
-    public Task()
+    public TaskEntity()
     {
     }
 
@@ -38,16 +35,6 @@ public class Task extends AbstractEntity
     public void setTitle(String title)
     {
         this.title = title;
-    }
-
-    public boolean isCompleted()
-    {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed)
-    {
-        this.completed = completed;
     }
 
     public UserEntity getUserId()

@@ -2,7 +2,6 @@ package com.example.demo.models;
 
 import com.example.demo.entity.UserEntity;
 
-import javax.persistence.Column;
 
 public class UserModel
 {

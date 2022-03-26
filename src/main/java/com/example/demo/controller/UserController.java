@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.exceptions.UserNotFoundException;
-import com.example.demo.servives.UserService;
+import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;

@@ -17,7 +17,7 @@ public class UserEntity extends AbstractEntity
     String lastName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    List<Task> tasks;
+    List<TaskEntity> tasks;
 
     public UserEntity()
     {

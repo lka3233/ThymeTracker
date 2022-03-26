@@ -1,8 +1,11 @@
-package com.example.demo.servives;
+package com.example.demo.services;
 
+import com.example.demo.entity.TaskEntity;
 import com.example.demo.entity.UserEntity;
+import com.example.demo.exceptions.TaskNotFoundException;
 import com.example.demo.exceptions.UserAlreadyExistsException;
 import com.example.demo.exceptions.UserNotFoundException;
+import com.example.demo.models.TaskModel;
 import com.example.demo.models.UserModel;
 import com.example.demo.repository.UserDao;
 import org.slf4j.Logger;
@@ -35,20 +38,15 @@ public class UserService
     }
     public UserModel getUser(Long id) throws UserNotFoundException
     {
-        UserEntity entity = null;
-        try
+        Optional<UserEntity> container = userDao.findById(id);
+        if (container.isPresent())
         {
-            entity = userDao.findById(id).get();
+            return UserModel.toModel(container.get());
         }
-        catch (Exception e)
-        {
-            logger.error("Something wrong: ", e);
-        }
-        if (null == entity)
+        else
         {
             throw new UserNotFoundException("Пользователь не найден");
         }
-        return UserModel.toModel(entity);
     }
 
     public Long deleteUser(Long id)
