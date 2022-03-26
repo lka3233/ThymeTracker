@@ -56,15 +56,15 @@ public class TaskController
         }
     }
 
-    /*@PutMapping
-    public ResponseEntity updateTask(@RequestParam Long id)
+    @PutMapping
+    public ResponseEntity updateTask(@RequestParam Long id, @RequestBody TaskEntity entity)
     {
         try
         {
-            taskService.createTask(entity);
-            return ResponseEntity.ok("Задача сохранена");
+            taskService.updateTask(entity, id);
+            return ResponseEntity.ok("Параметры обновлены");
         }
-        catch (IllegalTaskTitleException e)
+        catch (TaskNotFoundException e)
         {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -72,7 +72,7 @@ public class TaskController
         {
             return ResponseEntity.internalServerError().body("Внутренняя ошибка: " + e.getMessage());
         }
-    }*/
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTask(@PathVariable Long id)

@@ -40,7 +40,7 @@ public class TaskService
 
     public TaskModel createTask(TaskEntity entity, Long userId) throws IllegalTaskTitleException, UserNotFoundException
     {
-        //Check if user is exists and title is not empty
+        //Check if user exists and title is not empty
         Optional<UserEntity> container = userDao.findById(userId);
         if (!container.isPresent())
         {
@@ -64,6 +64,29 @@ public class TaskService
             throw e;
         }
     }
+    public TaskModel updateTask(TaskEntity entity, Long id) throws TaskNotFoundException
+    {
+        //Check if task exists
+        Optional<TaskEntity> container = taskDao.findById(id);
+        if (!container.isPresent())
+        {
+            throw new TaskNotFoundException("Запись не найдена");
+        }
+        TaskEntity currentTask = container.get();
+        fillAtributes(currentTask, entity);
+        //Saving entity
+        try
+        {
+            taskDao.save(currentTask);
+            return TaskModel.toModel(currentTask);
+        }
+        catch (Exception e)
+        {
+            String message = String.format("Произошла ошибка при сохранении задачи %s",entity.getTitle());
+            logger.error(message,e);
+            throw e;
+        }
+    }
 
     public Long deleteTask(Long id)
     {
@@ -79,5 +102,16 @@ public class TaskService
             throw e;
         }
         return result;
+    }
+
+    /**
+     * Fill attributes from client's data
+     * @param currentTask
+     * @param entity
+     */
+    private void fillAtributes(TaskEntity currentTask, TaskEntity entity)
+    {
+        currentTask.setTitle(entity.getTitle());
+        currentTask.setState(entity.getState());
     }
 }
