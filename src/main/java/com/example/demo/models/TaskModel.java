@@ -1,6 +1,7 @@
 package com.example.demo.models;
 
 import com.example.demo.entity.TaskEntity;
+import com.example.demo.entity.TaskEntity.State;
 import java.util.Date;
 
 public class TaskModel
@@ -11,6 +12,12 @@ public class TaskModel
     private Date startDate;
     private Date endDate;
     private Long duration;
+    private State state;
+
+    public State getState()
+    {
+        return state;
+    }
 
     TaskModel(TaskEntity entity)
     {
@@ -23,6 +30,7 @@ public class TaskModel
         {
             this.userId = entity.getUserId().getId();
         }
+        this.state = entity.getState();
     }
 
     public static TaskModel toModel(TaskEntity entity)

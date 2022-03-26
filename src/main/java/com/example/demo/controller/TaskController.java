@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.TaskEntity;
 import com.example.demo.exceptions.IllegalTaskTitleException;
 import com.example.demo.exceptions.TaskNotFoundException;
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -34,7 +35,29 @@ public class TaskController
     }
 
     @PostMapping
-    public ResponseEntity createTask(@RequestBody TaskEntity entity)
+    public ResponseEntity createTask(@RequestBody TaskEntity entity,@RequestParam Long userId)
+    {
+        try
+        {
+            taskService.createTask(entity, userId);
+            return ResponseEntity.ok("Задача сохранена");
+        }
+        catch (IllegalTaskTitleException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (UserNotFoundException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.internalServerError().body("Внутренняя ошибка: " + e.getMessage());
+        }
+    }
+
+    /*@PutMapping
+    public ResponseEntity updateTask(@RequestParam Long id)
     {
         try
         {
@@ -49,7 +72,7 @@ public class TaskController
         {
             return ResponseEntity.internalServerError().body("Внутренняя ошибка: " + e.getMessage());
         }
-    }
+    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteTask(@PathVariable Long id)

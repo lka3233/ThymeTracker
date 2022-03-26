@@ -1,10 +1,13 @@
 package com.example.demo.services;
 
 import com.example.demo.entity.TaskEntity;
+import com.example.demo.entity.UserEntity;
 import com.example.demo.exceptions.IllegalTaskTitleException;
 import com.example.demo.exceptions.TaskNotFoundException;
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.models.TaskModel;
 import com.example.demo.repository.TaskDao;
+import com.example.demo.repository.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ public class TaskService
 {
     @Autowired
     private TaskDao taskDao;
+    @Autowired
+    private UserDao userDao;
 
     Logger logger = LoggerFactory.getLogger(TaskService.class);
 
@@ -33,14 +38,22 @@ public class TaskService
         }
     }
 
-    public TaskModel createTask(TaskEntity entity) throws IllegalTaskTitleException
+    public TaskModel createTask(TaskEntity entity, Long userId) throws IllegalTaskTitleException, UserNotFoundException
     {
+        //Check if user is exists and title is not empty
+        Optional<UserEntity> container = userDao.findById(userId);
+        if (!container.isPresent())
+        {
+            throw new UserNotFoundException("Пользователь не найден");
+        }
         if (entity.getTitle().isEmpty())
         {
             throw new IllegalTaskTitleException("У задачи не указан title");
         }
+        //Saving entity
         try
         {
+            entity.setUserId(container.get());
             taskDao.save(entity);
             return TaskModel.toModel(entity);
         }

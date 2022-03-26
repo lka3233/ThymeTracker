@@ -7,21 +7,24 @@ import java.util.Date;
 @Table(name = "tbl_tasks")
 public class TaskEntity extends AbstractEntity
 {
+   public enum State
+    {
+        RUNNING,
+        STOPPED
+    }
     @Column
     String title;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     UserEntity userId;
-
     @Column
     Date startDate;
-
     @Column
     Date endDate;
-
     @Column
     Long duration;
+    @Column
+    State state;
 
     public TaskEntity()
     {
@@ -75,6 +78,16 @@ public class TaskEntity extends AbstractEntity
     public void setDuration(Long duration)
     {
         this.duration = duration;
+    }
+
+    public State getState()
+    {
+        return state;
+    }
+
+    public void setState(State state)
+    {
+        this.state = state;
     }
 }
 
